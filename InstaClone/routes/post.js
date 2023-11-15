@@ -18,7 +18,7 @@ router.route('/allpost').get((req,res)=>{
 
 
 
-router.post('/createpost',(req, res) => {
+router.post('/createpost',requireLogin,(req, res) => {
     res.send(`Hello,  This is create post route.`);
     const {title,body,pic} = req.body;
     if(!title || !body || !pic){
@@ -28,7 +28,7 @@ router.post('/createpost',(req, res) => {
     const post = new Post({
         title,
         body,
-        pic,
+        photo:pic,
         postedBy:req.user
     })
     post.save().then(result=>{
