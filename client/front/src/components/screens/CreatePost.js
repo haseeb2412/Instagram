@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import M from 'materialize-css'
 import {useHistory} from 'react-router-dom'
@@ -12,6 +12,14 @@ const CreatePost = () => {
   const[body,setBody] =useState("");
   const[image,setImage] =useState("");
   const[url,setUrl] =useState("");
+
+  useEffect(()=>{
+      if(url){
+
+
+        
+      }
+  },[url])
   
 //   const postDetails =async () => {
 
@@ -43,29 +51,32 @@ const postDetails = async () => {
   data.append("upload_preset", "instaclone");
   data.append("cloud_name", "dzokxu7st");
 
-  fetch("https://api.cloudinary.com/v1_1/dzokxu7st/image/upload",{
+  const cloudResponse = await fetch("https://api.cloudinary.com/v1_1/dzokxu7st/image/upload",{
     method:"post",
     body:data
 })
-.then(res=>res.json())
-.then(data=>{
-   console.log(data.url);
-})
-.catch(err=>{
-    console.log(err);
-})
+const cloudinaryData = await cloudResponse.json();
+// .then(res=>res.json())
+// .then(data=>{
+//    console.log(data.url);
+// })
+// .catch(err=>{
+//     console.log(err);
+// })
 
 
 const response = await axios.post("http://localhost:5000/createpost", {
             body,
             title,
-            pic:url,
+            pic:cloudinaryData.url,
         }, {
             headers: {
                 "Content-Type": "application/json",
+                "Authorization":"Bearer "+localStorage.getItem("jwt")
             },
         })
         console.log(response)
+        console.log(cloudinaryData.url);
 
       
         if (!response) {
@@ -76,9 +87,6 @@ const response = await axios.post("http://localhost:5000/createpost", {
             console.log(response.data);
             history.push("/");
         }
-
-
-
 };
 
 
