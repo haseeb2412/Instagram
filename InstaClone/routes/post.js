@@ -5,16 +5,24 @@ const Post = mongoose.model("Post");
 
 const requireLogin = require('../middlewear/requireLogin');
 
-router.route('/allpost').get((req,res)=>{
+router.get('/allpost',(req,res)=>{
 
     // res.send({message:"all post"});
-    Post.find().populate("postedBy","_id name").then(post=>{
-        res.status(200).json({post});
-    }).catch(err=>{
+    Post.find()
+    // .populate("postedBy","_id name")
+    .then(posts=>{
+        res.status(200).json({posts});
+        res.status(200).json({message:"we got the response"});
+
+    })
+    .catch(err=>{
         res.status(401).json({error:"there is something missing"});
         
     })
 })
+
+
+
 
 
 
@@ -42,7 +50,8 @@ router.post('/createpost',requireLogin,(req, res) => {
 router.get('/mypost',requireLogin,(req,res)=>{
     // res.json({message:"this is my post router"})
     Post.find({postedBy:req.user._id})
-    .populate("postedBy","_id name").then(mypost=>{
+    // .populate("postedBy","_id name")
+    .then(mypost=>{
         res.json({mypost});
     }).catch(err=>{
         // console.log(err);

@@ -30,7 +30,7 @@ const {state,dispatch} = useContext(UserContext);
                 },
             })
             console.log(response);
-            // console.log(response.data.token);
+            console.log(response.data.token);
             // console.log(response.data.user);
     
           
