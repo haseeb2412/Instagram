@@ -1,22 +1,35 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../App';
-
+import {useHistory} from 'react-router-dom'
+import { Link } from '@mui/material';
 const Navbar = () => {
   const {state, dispatch }= useContext(UserContext);
+  const history = useHistory();
 
-  // const renderList = () => {
-  //   if (state) {
-  //     return [
-  //         <li key="profile"><a href="/profile">Profile</a></li>,
-  //         <li key="createpost"><a href="/createpost">Create Post</a></li>
-  //     ]
-  //   } else {
-  //     return [
-  //         <li key="signin"><a href="/signin">Sign In</a></li>,
-  //         <li key="signup"><a href="/signup">Sign Up</a></li>
-  //     ];
-  //   }
-  // };
+  const renderList = () => {
+    if (state) {
+      return [
+          <li key="profile"><a href="/profile">Profile</a></li>,
+          <li key="createpost"><a href="/createpost">Create Post</a></li>,
+          <li key="logout">
+            <button className="btn #c62828 red darken-3"  name="action" 
+            onClick={()=>{
+              localStorage.clear()
+            dispatch({type:"CLEAR"})
+            history.push('/signin')
+            }}
+            >
+                Logout
+            </button>
+          </li>
+      ]
+    } else {
+      return [
+          <li key="signin"><a href="/signin">Sign In</a></li>,
+          <li key="signup"><a href="/signup">Sign Up</a></li>
+      ];
+    }
+  };
 
   return (
     <div>
@@ -26,11 +39,8 @@ const Navbar = () => {
             Instagram
           </a>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
-            {/* {renderList()} */}
-            <li key="profile"><a href="/profile">Profile</a></li>
-          <li key="createpost"><a href="/createpost">Create Post</a></li>
-          <li key="signin"><a href="/signin">Sign In</a></li>
-          <li key="signup"><a href="/signup">Sign Up</a></li>
+            {renderList()}
+         
           </ul>
         </div>
       </nav>

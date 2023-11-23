@@ -22,6 +22,10 @@ a{
   border-bottom: 1px solid rgb(8,93,252) !important;
   box-shadow: 0 1px  0 0 rgb(8,93,252) !important;
 }
+.input-field input[type=password]:focus{
+  border-bottom: 1px solid rgb(8,93,252) !important;
+  box-shadow: 0 1px  0 0 rgb(8,93,252) !important;
+}
 
 /* profile */
 
