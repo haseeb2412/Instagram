@@ -1,6 +1,6 @@
 import './App.css';
 import Navbar from './components/Navbar';
-import {BrowserRouter,Route,Switch,useHistory} from 'react-router-dom'
+import {BrowserRouter as Router,Route,Switch,useHistory} from 'react-router-dom'
 import Profile from './components/screens/Profile';
 import Signup from './components/screens/Signup';
 // import Login from './components/screens/Login';
@@ -21,13 +21,14 @@ const Routing =()=>{
     const user = JSON.parse(localStorage.getItem("user"));
     if(user){
       dispatch({type:"USER",payload:user})
-      history.push("/");
     }
     else{
       history.push('/signin')
     }
     // console.log(user);
-  },[])
+  // },[dispatch,history])
+},[])
+
 
 
 
@@ -42,7 +43,7 @@ const Routing =()=>{
         <Route path="/signup">
           <Signup/>
         </Route>
-        <Route path="/profile">
+        <Route  exact path="/profile">
           <Profile/>
         </Route>
         <Route path="/createpost">
@@ -58,10 +59,10 @@ function App() {
     <>
     <UserContext.Provider value={{state,dispatch}}>
 
-      <BrowserRouter>
-      <Navbar/>
-      <Routing/>
-      </BrowserRouter>
+      <Router>
+        <Navbar/>
+        <Routing/>
+      </Router>
 
       </UserContext.Provider>
       

@@ -1,7 +1,10 @@
 import React, { useContext } from 'react';
 import { UserContext } from '../App';
-import {useHistory} from 'react-router-dom'
-import { Link } from '@mui/material';
+import {Link,useHistory} from "react-router-dom"
+
+
+
+
 const Navbar = () => {
   const {state, dispatch }= useContext(UserContext);
   const history = useHistory();
@@ -9,8 +12,8 @@ const Navbar = () => {
   const renderList = () => {
     if (state) {
       return [
-          <li key="profile"><a href="/profile">Profile</a></li>,
-          <li key="createpost"><a href="/createpost">Create Post</a></li>,
+          <li key="profile"><Link to="/profile">Profile</Link></li>,
+          <li key="createpost"><Link to="/createpost">Create Post</Link></li>,
           <li key="logout">
             <button className="btn #c62828 red darken-3"  name="action" 
             onClick={()=>{
@@ -25,8 +28,8 @@ const Navbar = () => {
       ]
     } else {
       return [
-          <li key="signin"><a href="/signin">Sign In</a></li>,
-          <li key="signup"><a href="/signup">Sign Up</a></li>
+          <li key="signin"><Link to="/signin">SignIn</Link></li>,
+          <li key="signup"><Link to="/signup">SignUp</Link></li>
       ];
     }
   };
@@ -35,10 +38,11 @@ const Navbar = () => {
     <div>
       <nav>
         <div className="nav-wrapper white" style={{ color: 'black' }}>
-          <a href={state?"/":"/signin"} className="brand-logo left">
+          <Link to={state ? "/" : "/signin"} className="brand-logo left">
             Instagram
-          </a>
+          </Link>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
+
             {renderList()}
          
           </ul>

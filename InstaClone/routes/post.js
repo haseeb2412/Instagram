@@ -5,18 +5,18 @@ const Post = mongoose.model("Post");
 
 const requireLogin = require('../middlewear/requireLogin');
 
-router.get('/allpost',(req,res)=>{
+router.get('/allpost',requireLogin,(req,res)=>{
 
     // res.send({message:"all post"});
     Post.find()
-    // .populate("postedBy","_id name")
+    .populate("postedBy","_id name")
     .then(posts=>{
         res.status(200).json({posts});
-        res.status(200).json({message:"we got the response"});
+        // res.status(200).json({message:"we got the response"});
 
     })
-    .catch(err=>{
-        res.status(401).json({error:"there is something missing"});
+    .catch(error=>{
+        res.status(400).json({error:"there is something missing"});
         
     })
 })
@@ -50,7 +50,7 @@ router.post('/createpost',requireLogin,(req, res) => {
 router.get('/mypost',requireLogin,(req,res)=>{
     // res.json({message:"this is my post router"})
     Post.find({postedBy:req.user._id})
-    // .populate("postedBy","_id name")
+    .populate("postedBy","_id name")
     .then(mypost=>{
         res.json({mypost});
     }).catch(err=>{
@@ -59,7 +59,107 @@ router.get('/mypost',requireLogin,(req,res)=>{
     })
 })
 
+// router.put('/like',(req,res)=>{
+//     // res.json({message:"this is the like router"})
+//     Post.findByIdAndUpdate(req.body.postId,{
+//         $push:{likes:req.user._id}
+//     },{
+//         new:true
+//     }).exec((err,result)=>{
+//         if(err){
+//             return res.status(422).json({error:err});
+//         }else{
+//             res.json(result)
+//         }
+//     })
+// })
 
+router.put('/like',requireLogin, (req, res) => {
+    // Log the received data for debugging
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ error: "Unauthorized user" });
+      }
+    console.log('Received like request:', req.body);
+  
+    Post.findByIdAndUpdate(req.body.postId, {
+      $push: { likes: req.user._id }
+    }, {
+      new: true
+    })
+    .then(result => {
+      console.log('Post updated successfully:');
+      res.json(result);
+    })
+    .catch(err => {
+      console.error('Error updating post:', err);
+      res.status(422).json({ error: err });
+    });
+  });
+
+  router.put('/unlike',requireLogin, (req, res) => {
+    // Log the received data for debugging
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ error: "Unauthorized user" });
+      }
+    console.log('Received like request:', req.body);
+  
+    Post.findByIdAndUpdate(req.body.postId, {
+      $pull: { likes: req.user._id }
+    }, {
+      new: true
+    })
+    .then(result => {
+      console.log('Post updated successfully:');
+      res.json(result);
+    })
+    .catch(err => {
+      console.error('Error updating post:', err);
+      res.status(422).json({ error: err });
+    });
+  });
+  
+
+  router.put('/comment',requireLogin, (req, res) => {
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ error: "Unauthorized user" });
+      }
+    console.log('Received like request:', req.body);
+
+    const comment={
+        text:req.body.text,
+        postedBy:req.user._id
+    }
+  
+    Post.findByIdAndUpdate(req.body.postId, {
+      $push: { comments: comment }
+    }, {
+      new: true
+    })
+    .populate("comments.postedBy","_id name")
+    .then(result => {
+      console.log('Post updated successfully:');
+      res.json(result);
+    })
+    .catch(err => {
+      console.error('Error updating post:', err);
+      res.status(422).json({ error: err });
+    });
+  });
+  
+
+// router.put('/unlike',requireLogin,(req,res)=>{
+//     Post.findByIdAndUpdate(req.body.postId,{
+//         $pull:{likes:req.user._id}
+//     },{
+//         new:true
+//     }).exec((err,result)=>{
+//         if(err){
+//             return res.status(422).json({error:err});
+//         }else{
+//             res.json(result)
+//         }
+//     })
+// })
 
 
 module.exports=router;
