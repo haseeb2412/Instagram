@@ -9,6 +9,7 @@ import Signin from './components/screens/Signin';
 import CreatePost from './components/screens/CreatePost';
 import { createContext,useContext,useEffect, useReducer } from 'react';
 import {reducer,initailState} from './reducers/userReducer'
+import UserProfile from './components/screens/UserProfile';
 
 
 export const UserContext = createContext();
@@ -48,6 +49,9 @@ const Routing =()=>{
         </Route>
         <Route path="/createpost">
           <CreatePost/>
+        </Route>
+        <Route path="/profile/:userid">
+          <UserProfile/>
         </Route>
       </Switch>
     )

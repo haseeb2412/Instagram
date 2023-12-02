@@ -157,7 +157,8 @@ router.put('/like',requireLogin, (req, res) => {
         return res.status(422).json({error:"this is the error"})
       }
       if(response.postedBy._id.toString() === req.user._id.toString()){
-          response.remove()
+          // response.remove()
+          Post.findByIdAndDelete(req.params.postId)
           .then(result=>{
             res.json(result)
           }).catch(err=>{

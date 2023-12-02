@@ -9,6 +9,7 @@ require("./models/User")
 require("./models/post")
 const myrouter =require('./routes/auth')
 const myrouter2 =require('./routes/post')
+const myrouter3 =require('./routes/User')
 
 
 
@@ -21,6 +22,7 @@ app.use(express.json());
 
 app.use(myrouter);
 app.use(myrouter2);
+app.use(myrouter3);
 
 mongoose.connect(MONGODB_URL);
 mongoose.connection.on('connected',()=>{
