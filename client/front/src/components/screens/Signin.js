@@ -1,5 +1,5 @@
 import {React,useState,useEffect,useContext} from "react";
-import {useHistory} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import M from 'materialize-css'
 import axios from 'axios';
 import {UserContext} from '../../App'
@@ -30,7 +30,7 @@ const {state,dispatch} = useContext(UserContext);
                 },
             })
             console.log(response);
-            // console.log(response.data.token);
+            console.log(response.data.token);
             // console.log(response.data.user);
     
           
@@ -69,7 +69,7 @@ const {state,dispatch} = useContext(UserContext);
         Login
     </button>
     <h5>
-    <a href='/signup'>Dont have account?</a>
+    <Link to='/signup'>Dont have account?</Link>
     </h5>
       
             

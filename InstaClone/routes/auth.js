@@ -74,7 +74,8 @@ router.route("/signin").post((req, res) => {
       .then((doMatch) => {
         if (doMatch) {
           // res.status(200).json({message:"successfully signed in"})
-          const token = jwt.sign({ _id: savedUser.id }, JWT_SECRET);
+          // const token = jwt.sign({_id:savedUser._id},JWT_SECRET)
+          const token = jwt.sign({ _id:savedUser.id},JWT_SECRET);
           const { _id, name, email } = savedUser;
           res.json({ token, user: { _id, name, email } });
         } else {

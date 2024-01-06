@@ -1,6 +1,35 @@
-import React from 'react'
+import {React,useState,useEffect, useContext} from 'react'
+import axios from 'axios';
+import {UserContext} from "../../App"
 
 const Profile = () => {
+  const [pics,setPics] = useState([]);
+  const {state,dispatch} = useContext(UserContext);
+  // console.log(state);
+  // console.log(state.name);
+  
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/mypost", {
+        headers: {
+          Authorization: "Bearer "+localStorage.getItem("jwt"),
+        },
+      })
+      .then((response) => {
+        // console.log(response.data);
+        // console.log(response.data.mypost);
+        setPics(response.data.mypost);
+        console.log("successfull");
+        // setData(response.data.posts);
+      })
+      .catch((error) => {
+        console.error("Error fetching posts:");
+      });
+  }, []);
+
+
+
+
   return (
     <div style={{
     maxWidth:"550px"  ,margin:"0px auto"
@@ -16,7 +45,7 @@ const Profile = () => {
           src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8MXwwfHx8MA%3D%3D' alt='profile'/>
         </div>
         <div>
-          <h4>papa is princess</h4>
+          <h4>{state ? state.name:"loading"}</h4>
           <div style={{
             display:"flex",justifyContent:"space-between",
             width:"108%",
@@ -31,7 +60,16 @@ const Profile = () => {
 
 
         <div className='gallery'>
-          <img className='item' src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8MXwwfHx8MA%3D%3D' alt='images'/>
+
+          {
+            pics.map((item)=>{
+                return (
+          <img className='item' key={item._id} src={item.photo} alt={item.title}/>
+
+                )
+            })
+          }
+          <img className='item'  src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8MXwwfHx8MA%3D%3D' alt='images'/>
           <img className='item' src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8MXwwfHx8MA%3D%3D' alt='images'/>
           <img className='item' src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8MXwwfHx8MA%3D%3D' alt='images'/>
           <img className='item' src='https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8MXwwfHx8MA%3D%3D' alt='images'/>

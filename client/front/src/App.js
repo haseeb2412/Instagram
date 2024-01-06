@@ -1,6 +1,6 @@
 import './App.css';
 import Navbar from './components/Navbar';
-import {BrowserRouter,Route,Switch,useHistory} from 'react-router-dom'
+import {BrowserRouter as Router,Route,Switch,useHistory} from 'react-router-dom'
 import Profile from './components/screens/Profile';
 import Signup from './components/screens/Signup';
 // import Login from './components/screens/Login';
@@ -9,25 +9,27 @@ import Signin from './components/screens/Signin';
 import CreatePost from './components/screens/CreatePost';
 import { createContext,useContext,useEffect, useReducer } from 'react';
 import {reducer,initailState} from './reducers/userReducer'
+import UserProfile from './components/screens/UserProfile';
 
 
 export const UserContext = createContext();
 
 const Routing =()=>{
   const history = useHistory();
-  const {state,dispatch} = useContext(UserContext);
+  const {state,dispatch}= useContext(UserContext);
 
   useEffect(()=>{
-    const user =JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
     if(user){
       dispatch({type:"USER",payload:user})
-      history.push("/");
-    }else{
-      history.push('/signin')
-
     }
-    console.log(user);
-  },[])
+    else{
+      history.push('/signin')
+    }
+    // console.log(user);
+  // },[dispatch,history])
+},[])
+
 
 
 
@@ -36,18 +38,20 @@ const Routing =()=>{
         <Route exact path="/">
           <Home/>
         </Route>
-
         <Route path="/signin">
           <Signin/>
         </Route>
         <Route path="/signup">
           <Signup/>
         </Route>
-        <Route path="/profile">
+        <Route  exact path="/profile">
           <Profile/>
         </Route>
         <Route path="/createpost">
           <CreatePost/>
+        </Route>
+        <Route path="/profile/:userid">
+          <UserProfile/>
         </Route>
       </Switch>
     )
@@ -59,10 +63,10 @@ function App() {
     <>
     <UserContext.Provider value={{state,dispatch}}>
 
-      <BrowserRouter>
-      <Navbar/>
-      <Routing/>
-      </BrowserRouter>
+      <Router>
+        <Navbar/>
+        <Routing/>
+      </Router>
 
       </UserContext.Provider>
       
