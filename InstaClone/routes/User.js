@@ -22,6 +22,56 @@ router.get("/user/:id", requireLogin, async (req, res) => {
     }
   });
   
+  router.put("/follow", requireLogin, async (req, res) => {
+    try {
+      const updateFollowedUser = await User.findByIdAndUpdate(
+        req.body.followid,
+        {
+          $push: { followers: req.user._id },
+        },
+        {
+          new: true,
+        }
+      );
+  
+      const updateCurrentUser = await User.findByIdAndUpdate(
+        req.user._id,
+        {
+          $push: { following: req.body.followid },
+        },
+        { new: true }
+      );
+  
+      res.json(updateCurrentUser);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
+  
+
+  router.put('/unfollow',requireLogin,(req,res)=>{
+    User.findByIdAndUpdate(req.body.unfollowid,{
+      $pull:{followers:req.user._id}
+    },{
+      new:true
+    },(err,result=>{
+      if(err){
+        return res.status(422).json({error:err})
+      }
+      User.findByIdAndUpdate(req.user._id,{
+        $pull:{following:req.body.unfollowid},
+
+      },{new:true}).then(result=>{
+        res.json(result)
+      }).catch(error=>{
+        res.json({error:error})
+      })
 
 
+
+
+    }))
+  })
 module.exports = router;
