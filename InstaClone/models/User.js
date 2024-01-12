@@ -12,6 +12,8 @@ const UserSchema = new mongoose.Schema({
     password:{
         type:String,
         required:true,
-    }
+    },
+    followers:[{type:String,ref:"User"}],
+    following:[{type:String,ref:"User"}]
 })
 module.exports = mongoose.model("User",UserSchema);

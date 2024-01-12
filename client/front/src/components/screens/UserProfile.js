@@ -7,7 +7,7 @@ const UserProfile = () => {
     const [userProfile,setProfile] = useState(null);
     const {state,dispatch} = useContext(UserContext);
     const {userid} = useParams();
-    console.log(userid)
+    // console.log(userid)
 
 useEffect(() => {
         axios
@@ -17,7 +17,7 @@ useEffect(() => {
             },
           })
           .then((response) => {
-            console.log(response.data);
+            // console.log(response.data);
             // console.log(response.data);
             // console.log(response.data.user.name);
             setProfile(response.data);
@@ -26,6 +26,24 @@ useEffect(() => {
             console.error("Error fetching posts:");
           });
 },[]);
+
+const followUser = () => {
+  axios.put('http://localhost:5000/follow',{followid: userid,},
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer '+localStorage.getItem('jwt'),
+      },
+    })
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
+
+
 
   return (
     <>
@@ -56,6 +74,12 @@ useEffect(() => {
             <h6>40 followers</h6>
             <h6>35 following</h6>
           </div>
+
+          <button className="btn waves-effect waves-light #64b5f6 blue lighten-2 darken-1"  name="action" onClick={()=>{followUser()}}>
+        follow
+    </button>
+
+
           </div>
           
         </div>
